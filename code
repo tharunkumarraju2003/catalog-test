@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+long long decodeValue(const char *value, int base) {
+    return strtoll(value, NULL, base);
+}
+
+
+long long lagrangeInterpolation(long long points[][2], int k) {
+    long long result = 0;
+    
+    for (int i = 0; i < k; i++) {
+        long long xi = points[i][0];
+        long long yi = points[i][1];
+        long long term = yi;
+        
+        for (int j = 0; j < k; j++) {
+            if (i != j) {
+                long long xj = points[j][0];
+                term *= -xj;
+                term /= (xi - xj);
+            }
+        }
+        
+        result += term;
+    }
+    
+    return result;
+}
+
+void findConstantTerm() {
+    int n, k;
+    
+    
+    printf("Enter number of points (n): ");
+    scanf("%d", &n);
+    
+    printf("Enter the minimum number of points (k): ");
+    scanf("%d", &k);
+    
+    long long points[n][2];
+    
+  
+    for (int i = 0; i < n; i++) {
+        int base;
+        char value[50];
+        
+      
+        printf("Enter x for point %d: ", i + 1);
+        scanf("%lld", &points[i][0]);
+        
+      
+        printf("Enter base for y value of point %d: ", i + 1);
+        scanf("%d", &base);
+        
+      
+        printf("Enter y value of point %d (in base %d): ", i + 1, base);
+        scanf("%s", value);
+        
+      
+        points[i][1] = decodeValue(value, base);
+    }
+    
+    
+    long long constantTerm = lagrangeInterpolation(points, k);
+    
+    
+    printf("Constant term (c): %lld\n", constantTerm);
+}
+
+int main() {
+  
+    findConstantTerm();
+
+    return 0;
+}
